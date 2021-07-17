@@ -1,0 +1,36 @@
+method: SimpleNet # onet
+config:
+    log_cfg_path: configs/log.yaml
+data:
+  dataset: DatasetBase # Shapes3D
+  path: data/ShapeNet
+  classes: null
+  transforms:
+      noise: 0.005
+model:
+  identifier: simple_test
+  ckp_path: outputs/simple_test/checkpoints/model.ck
+  eval_method: EvalBase # evaluator
+
+  decoder: simple
+  encoder: resnet18
+  encoder_latent: null
+  decoder_kwargs: {}
+  encoder_kwargs: {}
+  encoder_latent_kwargs: {}
+training:
+  out_dir: outputs/
+  max_epochs: 20000
+  batch_size: 8
+  checkpoint_every: 30
+  validate_every: 30
+  visualize_every: 30
+  print_per_batch: 500
+  saver_max_num: 50
+  optimizer: ADAM
+  lr: 0.0001
+  scheduler: null
+  scheduler_params: null
+  overfit: False
+test:
+  batch_size: 2
