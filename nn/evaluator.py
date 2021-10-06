@@ -9,6 +9,7 @@ class EvalBase:
     """
     def __init__(self, cfg):
         self.cfg = cfg
+        self.loss_weights = cfg["training"]["losses"]
 
     def apply(self, data, preds):
         samples = self._get_samples(data, preds)
@@ -33,10 +34,8 @@ class EvalBase:
 
         WARNING: no gradients, total_metric required.
         """
-        lb_gnd = data["output"]
-        lb_pred = torch.argmax(preds, -1)
-        acc = torch.mean( (lb_gnd == lb_pred).float() ).item()
-        return {"acc": acc, "total_metric": acc}
+        raise Exception("Error: overriding required.")
+        return {"acc": 0.0}
 
     def _get_samples(self, data, preds):
         """

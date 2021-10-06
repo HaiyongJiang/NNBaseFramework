@@ -1,5 +1,9 @@
 outputs/
+data
 data/
+models/
 __pycache__
 **/__pycache__
 *.pyc
+*.pyd
+*.so

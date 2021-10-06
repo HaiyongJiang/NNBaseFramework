@@ -38,13 +38,11 @@ class Trainer:
         brestart (bool): if we set lr based on restored model
         """
         model_path = self.cfg["model"]["ckp_path"]
-        if not os.path.exists(model_path):
-            logging.error("The specified model path does not exist: " + model_path)
+        logging.info("load model from " + model_path)
+
+        if not ckp.is_file_exist(model_path):
             return
-        try:
-            load_dict = ck.load(model_path)
-        except FileExistsError:
-            load_dict = dict()
+        load_dict = ckp.load(filename=model_path)
         if not brestart:
             self.epoch_it = load_dict.get('epoch_it', -1)
             self.loss_val_best = load_dict.get('loss_val_best', np.inf)
@@ -177,10 +175,10 @@ class Trainer:
                     states["val_loss"] = -val_loss["total_metric"]
                     states["val_metric"] = val_loss
                     states["epoch"] = epoch
-                    checkpoint_io.save('model_best.pt', epoch_it=epoch,
+                    checkpoint_io.save('model_best.ck', epoch_it=epoch,
                                     loss_val_best=states["val_loss"])
 
-            checkpoint_io.save('model.pt', epoch_it=epoch,
+            checkpoint_io.save('model.ck', epoch_it=epoch,
                             loss_val_best=states["val_loss"])
 
             # Reduce learning rate if needed
@@ -317,6 +315,7 @@ class Trainer:
         '''Place data on a device, where data is stored as a dict.
         '''
         for k in data:
-            data[k] = data[k].to(self.device)
+            if not isinstance(data[k], list):
+                data[k] = data[k].to(self.device)
         return data
 

@@ -15,6 +15,8 @@ def set_logger(out_dir, cfpath="configs/log.yaml"):
     print(config)
     print("logging to %s" % (config["handlers"]["file"]["filename"]))
     logging.config.dictConfig(config)
+    global g_logging
+    g_logging = logging.getLogger()
 
 
 g_logging = None

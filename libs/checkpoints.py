@@ -48,6 +48,9 @@ class CheckpointIO(object):
         else:
             return self.load_file(filename)
 
+    def is_file_exist(self, filename):
+        return os.path.exists(os.path.join(self.checkpoint_dir, filename))
+
     def load_file(self, filename):
         '''Loads a module dictionary from file.
 

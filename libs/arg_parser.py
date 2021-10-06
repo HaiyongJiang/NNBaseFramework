@@ -25,8 +25,8 @@ def setup_GPU(ngpu=1, xsize=10000):
                 print("%d hours passed"%(counter/60))
     idxs = [v for _, v in sorted(zip(mems, idxs), reverse=True)]
     idxs = sorted(idxs[:ngpu])
-    print("Training on Gpus: %s." % (
-        str({"ID%d"%ii:"%fMB"%mems[ii] for ii in idxs})))
+    # print("Training on Gpus: %s." % (
+    #     str({"ID%d"%ii:"%fMB"%mems[ii] for ii in idxs})))
     GPU_IDS = ",".join([str(v) for v in idxs])
     os.environ["CUDA_VISIBLE_DEVICES"] = GPU_IDS
     return list(range(len(idxs)))
@@ -39,7 +39,7 @@ def get_arg_parser():
     )
     parser.add_argument('config', type=str, help='Path to config file.')
     parser.add_argument('--no-cuda', action='store_true', help='Do not use cuda.')
-    parser.add_argument('--no-restore', action='store_false', help='Restore network if available.')
+    parser.add_argument('--no-restore', action='store_true', help='Restore network if available.')
     parser.add_argument('--opt_layers', type=str, default=".*", help="layer regex to optimize")
     parser.add_argument('--ngpu', type=int, default=1, help='the number of gpu to use .')
     parser.add_argument('--train', action='store_false', help='train the network.')

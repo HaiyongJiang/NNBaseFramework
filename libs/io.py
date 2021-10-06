@@ -28,14 +28,22 @@ def export_pointcloud_details(vertices, normals, scale, out_file, as_text=True):
     plydata.write(out_file)
 
 
-def load_pointcloud(in_file):
+def load_pointcloud(in_file, with_normal=False):
     plydata = PlyData.read(in_file)
     vertices = np.stack([
         plydata['vertex']['x'],
         plydata['vertex']['y'],
         plydata['vertex']['z']
     ], axis=1)
-    return vertices
+    if not with_normal:
+        return vertices
+    else:
+        normals = np.stack([
+            plydata['vertex']['nx'],
+            plydata['vertex']['ny'],
+            plydata['vertex']['nz'],
+        ], axis=1)
+        return vertices, normals
 
 
 def read_off(file):

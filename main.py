@@ -15,13 +15,13 @@ import numpy as np
 import shutil
 import yaml
 import glob
+import logging
 from libs import config
 from libs.checkpoints import CheckpointIO
 from libs.train_callbacks import (
     TensorboardLoggerCallback, TrainSaverCallback
 )
 from libs.logger import set_logger
-import logging
 
 
 def main(args, gpu_ids=[0]):
@@ -35,8 +35,14 @@ def main(args, gpu_ids=[0]):
     bParallel = g_args.ngpu > 1
     is_cuda = (torch.cuda.is_available() and not args.no_cuda)
     device = torch.device("cuda:0" if is_cuda else "cpu")
-    layers = args.opt_layers
-    logging.info("Use device: " + "cuda:0" if is_cuda else "cpu")
+    layers = ".*"
+    if "opt_layers" in cfg["training"]:
+        if cfg["training"]["opt_layers"] != ".*":
+            layers = cfg["training"]["opt_layers"]
+    if args.opt_layers != ".*":
+        layers = args.opt_layers
+
+   logging.info("Use device: " + "cuda:0" if is_cuda else "cpu")
     logging.info("Optimizing layers: " + str(layers))
 
     # Dataset
@@ -57,6 +63,7 @@ def main(args, gpu_ids=[0]):
     evaluator = config.get_evaluator(cfg)
     trainer = config.get_trainer(cfg, model, evaluator, device)
     if brestore:
+        print("RESTORING###############################################")
         trainer.restore_model(checkpoint_io)
     trainer.print_net_params()
 
@@ -110,8 +117,10 @@ def app_init(cfg, btrain=True, brestore=True):
 
         for folder in ["libs", "nn"]:
             dst_dir = os.path.join(cfg_dir, folder)
+            if os.path.exists(dst_dir):
+                shutil.rmtree(dst_dir)
             shutil.copytree(folder, dst_dir)
-        shutil.copy("train.py", cfg_dir + "/train.py")
+        shutil.copy("main.py", cfg_dir + "/main.py")
 
 
 ## traing
