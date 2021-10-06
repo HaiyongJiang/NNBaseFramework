@@ -1,0 +1,27 @@
+name: cvxnet
+channels:
+  - defaults
+dependencies:
+  - pip=21.0.1
+  - python=3.7.11
+  - setuptools=58.0.4
+  - pip:
+    - cython==0.29.24
+    - easydict==1.9
+    - gputil==1.4.0
+    - h5py==3.1.0
+    - numpy==1.19.5
+    - pillow==8.3.2
+    - plyfile==0.7.4
+    - pyyaml==5.4.1
+    - scikit-image==0.18.3
+    - scipy==1.7.1
+    - tensorboard==2.6.0
+    - tensorboardx==2.4
+    - tensorflow==2.6.0
+    - torch==1.4.0
+    - torchvision==0.5.0
+    - tqdm==4.62.3
+    - trimesh==3.9.30
+    - visdom==0.1.8.9
+prefix: /home/haiyong/anaconda3/envs/cvxnet
